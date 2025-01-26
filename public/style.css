@@ -1,0 +1,16 @@
+#users {
+    width: 150px;
+    border-right: 1px solid #ddd;
+    padding: 10px;
+    background: #f9f9f9;
+    overflow-y: auto;
+}
+
+#users-list li {
+    cursor: pointer;
+    padding: 5px;
+}
+
+#users-list li:hover {
+    background: #e0e0e0;
+}

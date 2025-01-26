@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Autentificare Chat</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="auth-container">
+        <h2>Autentificare</h2>
+        <form id="login-form">
+            <input type="text" id="username" placeholder="Nume utilizator" required />
+            <input type="password" id="password" placeholder="Parolă" required />
+            <button type="submit">Conectează-te</button>
+        </form>
+        <p>Nu ai un cont? <a href="/register.html" id="register-link">Înregistrează-te</a></p>
+    </div>
+    <script>
+        document.getElementById('login-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            const response = await fetch('/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username, password }),
+            });
+
+            const data = await response.json();
+            if (data.token) {
+                localStorage.setItem('token', data.token);
+                window.location.href = '/chat.html';
+            } else {
+                alert(data.error);
+            }
+        });
+
+        document.getElementById('register-link').addEventListener('click', () => {
+            window.location.href = '/register.html';
+        });
+    </script>
+</body>
+</html>
