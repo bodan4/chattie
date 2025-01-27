@@ -1,16 +1,104 @@
-#users {
-    width: 150px;
-    border-right: 1px solid #ddd;
-    padding: 10px;
-    background: #f9f9f9;
-    overflow-y: auto;
+/* Stilizare globală */
+body {
+    font-family: 'Arial', sans-serif;
+    background: linear-gradient(135deg, #6c5ce7, #00b894);
+    color: #fff;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
 }
 
-#users-list li {
+/* Containerul de autentificare */
+.auth-container {
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+}
+
+h2 {
+    font-size: 28px;
+    margin-bottom: 20px;
+    font-weight: bold;
+    color: #fff;
+}
+
+/* Stiluri pentru inputuri */
+input {
+    width: 90%;
+    padding: 15px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #fff;
+    font-size: 16px;
+    transition: 0.3s ease-in-out;
+}
+
+input:focus {
+    outline: none;
+    border-color: #6c5ce7;
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Stiluri pentru butonul de autentificare */
+button {
+    width: 100%;
+    padding: 15px;
+    background-color: #6c5ce7;
+    color: #fff;
+    font-size: 18px;
+    border: none;
+    border-radius: 5px;
     cursor: pointer;
-    padding: 5px;
+    transition: 0.3s ease-in-out;
 }
 
-#users-list li:hover {
-    background: #e0e0e0;
+button:hover {
+    background-color: #00b894;
+}
+
+/* Stiluri pentru link-ul de înregistrare */
+p {
+    margin-top: 20px;
+    font-size: 16px;
+}
+
+a {
+    color: #6c5ce7;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+a:hover {
+    color: #00b894;
+}
+
+/* Adăugare efecte de hover pentru formular */
+form input, form button {
+    transition: all 0.3s ease;
+}
+
+form input:focus, form button:hover {
+    transform: translateY(-3px);
+}
+
+/* Responsivitate */
+@media screen and (max-width: 500px) {
+    .auth-container {
+        padding: 30px;
+    }
+    h2 {
+        font-size: 24px;
+    }
+    input, button {
+        font-size: 14px;
+    }
 }

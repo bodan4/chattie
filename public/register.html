@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Înregistrare - Chat App</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #6a11cb, #2575fc);
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .register-container {
+            background-color: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+            width: 400px;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #fff;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        input {
+            padding: 12px;
+            font-size: 14px;
+            border: none;
+            border-radius: 10px;
+            background-color: rgba(255, 255, 255, 0.2);
+            color: #fff;
+            outline: none;
+        }
+
+        input::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        button {
+            padding: 12px;
+            font-size: 16px;
+            border: none;
+            border-radius: 10px;
+            background: #2575fc;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        button:hover {
+            background: #00b894;
+        }
+
+        .password-strength {
+            font-size: 14px;
+            text-align: center;
+        }
+
+        .strength-weak {
+            color: #ff0000;
+        }
+
+        .strength-medium {
+            color: #ffa500;
+        }
+
+        .strength-strong {
+            color: #90ee90;
+        }
+
+        p {
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="register-container">
+        <h2>Înregistrare</h2>
+        <form id="register-form">
+            <input type="text" id="username" placeholder="Nume utilizator" required />
+            <input type="email" id="email" placeholder="Email" required />
+            <input type="text" id="full-name" placeholder="Nume complet" required />
+            <input type="tel" id="phone" placeholder="Telefon (opțional)" />
+            <input type="password" id="password" placeholder="Parolă" required />
+            <p id="password-strength" class="password-strength">Forța parolei:</p>
+            <input type="password" id="confirm-password" placeholder="Confirmă parola" required />
+            <button type="submit">Înregistrează-te</button>
+        </form>
+        <p>Ai deja un cont? <a href="/index.html">Conectează-te</a></p>
+    </div>
+
+    <script>
+        const passwordInput = document.getElementById('password');
+        const confirmPasswordInput = document.getElementById('confirm-password');
+        const passwordStrengthText = document.getElementById('password-strength');
+        const registerForm = document.getElementById('register-form');
+
+        // Verifică forța parolei
+        passwordInput.addEventListener('input', () => {
+            const password = passwordInput.value;
+            let strength = 'slabă';
+            let className = 'strength-weak';
+
+            if (password.length >= 8 && /[A-Z]/.test(password) && /\d/.test(password) && /[!@#$%^&*]/.test(password)) {
+                strength = 'puternică';
+                className = 'strength-strong';
+            } else if (password.length >= 6) {
+                strength = 'medie';
+                className = 'strength-medium';
+            }
+
+            passwordStrengthText.textContent = `Forța parolei: ${strength}`;
+            passwordStrengthText.className = `password-strength ${className}`;
+        });
+
+        // Gestiune formular înregistrare
+        registerForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const username = document.getElementById('username').value;
+            const email = document.getElementById('email').value;
+            const fullName = document.getElementById('full-name').value;
+            const phone = document.getElementById('phone').value;
+            const password = passwordInput.value;
+            const confirmPassword = confirmPasswordInput.value;
+
+            if (password !== confirmPassword) {
+                alert('Parolele nu se potrivesc!');
+                return;
+            }
+
+            const response = await fetch('/register', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    username,
+                    email,
+                    fullName,
+                    phone,
+                    password,
+                }),
+            });
+
+            const data = await response.json();
+            if (data.message) {
+                alert(data.message);
+                window.location.href = '/index.html';
+            } else {
+                alert(data.error);
+            }
+        });
+    </script>
+</body>
+</html>

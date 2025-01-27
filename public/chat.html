@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #6a11cb, #2575fc);
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .chat-container {
+            background-color: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            border-radius: 15px;
+            width: 400px;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        #users-list, #messages {
+            background-color: rgba(255, 255, 255, 0.2);
+            padding: 10px;
+            border-radius: 10px;
+            max-height: 150px;
+            overflow-y: auto;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        li {
+            margin-bottom: 5px;
+            padding: 5px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+        }
+
+        textarea {
+            background-color: rgba(255, 255, 255, 0.2);
+            border: none;
+            border-radius: 10px;
+            padding: 10px;
+            font-size: 14px;
+            color: #fff;
+            resize: none;
+            outline: none;
+            transition: box-shadow 0.3s;
+        }
+
+        textarea:focus {
+            box-shadow: 0 0 10px rgba(37, 117, 252, 0.8);
+        }
+
+        textarea::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        button {
+            padding: 12px;
+            font-size: 16px;
+            border: none;
+            border-radius: 10px;
+            background: #2575fc;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        button:hover {
+            background: #00b894;
+        }
+    </style>
+</head>
+<body>
+    <div class="chat-container">
+        <h2>Chat Privat</h2>
+        <div id="users-list">
+            <h3>Utilizatori online:</h3>
+            <ul></ul>
+        </div>
+        <div id="messages">
+            <h3>Mesaje:</h3>
+            <ul></ul>
+        </div>
+        <textarea id="message" placeholder="Scrie un mesaj" rows="5"></textarea>
+        <button id="send-message">Trimite</button>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io();
+        const token = localStorage.getItem('token');
+        if (!token) {
+            window.location.href = '/index.html';
+        }
+
+        // Emiterea unui eveniment de conectare
+        socket.emit('user_connected', 'User_' + Date.now()); // Poți să folosești username-ul aici
+
+        // Ascultă pentru mesajele private
+        socket.on('private_message', (data) => {
+            const messages = document.querySelector('#messages ul');
+            const messageItem = document.createElement('li');
+            messageItem.textContent = `${data.from}: ${data.message}`;
+            messages.appendChild(messageItem);
+        });
+
+        document.getElementById('send-message').addEventListener('click', () => {
+            const message = document.getElementById('message').value;
+            if (message.trim()) {
+                socket.emit('private_message', { to: 'User_2', message });
+                document.getElementById('message').value = ''; // Curăță câmpul de text
+            }
+        });
+    </script>
+</body>
+</html>
